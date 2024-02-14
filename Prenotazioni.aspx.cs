@@ -66,13 +66,14 @@ namespace Cinema
 
             foreach (string sala in new string[] { "SalaEst", "SalaSud", "SalaNord" })
             {
-
                 Label lblSala = new Label();
-                lblSala.Text = $"Prenotazioni per {sala}:";
+                lblSala.Text = $"Prenotazioni per {sala.Replace("Sala", " Sala ")}:";
+                phPrenotazioni.Controls.Add(new LiteralControl("<br/>"));
                 phPrenotazioni.Controls.Add(lblSala);
+                phPrenotazioni.Controls.Add(new LiteralControl("<br/>"));
 
                 string connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
-                string query = $"SELECT Nome, Cognome, Ridotto FROM {sala}";
+                string query = $"SELECT Nome, Cognome, Ridotto FROM dbo.[{sala}]";
 
                 using (SqlConnection con = new SqlConnection(connectionString))
                 {
@@ -86,15 +87,20 @@ namespace Cinema
                                 string nome = reader.GetString(0);
                                 string cognome = reader.GetString(1);
                                 bool ridotto = reader.GetBoolean(2);
+                                string idUnico = $"{nome}{cognome}".Replace(" ", ""); 
 
                                 Label lblPrenotazione = new Label();
-                                lblPrenotazione.Text = $"{nome} {cognome} - Prezzo ridotto: {ridotto}";
+                                lblPrenotazione.ID = $"lbl{idUnico}";
+                                lblPrenotazione.Text = $"{nome} {cognome} - Prezzo ridotto: {(ridotto ? "Sì" : "No")}";
                                 phPrenotazioni.Controls.Add(lblPrenotazione);
+                                phPrenotazioni.Controls.Add(new LiteralControl("<br/>"));
                             }
                         }
+
                     }
                 }
             }
         }
+
     }
 }
