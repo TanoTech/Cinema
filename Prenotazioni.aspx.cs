@@ -38,6 +38,8 @@ namespace Cinema
 
             SalvaPrenotazione(nomeTabella, nome, cognome, ridotto);
             VisualizzaPrenotazioni();
+            txtNome.Text = "";
+            txtCognome.Text = "";
         }
 
         private void SalvaPrenotazione(string nomeTabella, string nome, string cognome, bool ridotto)
